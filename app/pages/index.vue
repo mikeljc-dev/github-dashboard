@@ -246,6 +246,7 @@ watch(() => route.query.user, (user) => {
 })
 
 onMounted(() => {
+  fetchRateLimit()
   const user = route.query.user as string | undefined
   if (user)
     load(user)
