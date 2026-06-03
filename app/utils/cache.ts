@@ -34,7 +34,12 @@ export function writeCache<T>(key: string, data: T): void {
 
 export function clearCache(prefix: string): void {
   try {
-    const keys = Object.keys(sessionStorage).filter(k => k.startsWith(prefix))
+    const keys: string[] = []
+    for (let i = 0; i < sessionStorage.length; i++) {
+      const key = sessionStorage.key(i)
+      if (key?.startsWith(prefix))
+        keys.push(key)
+    }
     keys.forEach(k => sessionStorage.removeItem(k))
   }
   catch {

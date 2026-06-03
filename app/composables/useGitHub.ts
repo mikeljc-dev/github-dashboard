@@ -1,7 +1,9 @@
 import type { ContributionCalendar, GitHubEvent, GitHubRepo, GitHubUser, LanguageMap } from '~/types/github'
-import { pLimit } from '~/utils/async'
+import { pLimit, withRetry } from '~/utils/async'
 import { readCache, writeCache } from '~/utils/cache'
 import { MAX_LANGUAGE_CONCURRENCY } from '~/utils/constants'
+
+const RETRY_OPTIONS = { maxAttempts: 3, delayMs: 500 }
 
 function parseApiError(e: unknown): string {
   const err = e as { status?: number, data?: { message?: string } }
@@ -42,8 +44,8 @@ export function useGitHub() {
 
     try {
       const [userData, reposData] = await Promise.all([
-        $fetch<GitHubUser>(`/api/github/user?username=${username}`),
-        $fetch<GitHubRepo[]>(`/api/github/repos?username=${username}`),
+        withRetry(() => $fetch<GitHubUser>(`/api/github/user?username=${username}`), RETRY_OPTIONS),
+        withRetry(() => $fetch<GitHubRepo[]>(`/api/github/repos?username=${username}`), RETRY_OPTIONS),
       ])
 
       if (abortController.signal.aborted)
