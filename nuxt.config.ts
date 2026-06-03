@@ -13,6 +13,12 @@ export default defineNuxtConfig({
       githubBaseUrl: 'https://api.github.com',
     },
   },
+  app: {
+    head: {
+      htmlAttrs: { lang: 'es' },
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    },
+  },
   typescript: { strict: true },
   vite: {
     optimizeDeps: {
