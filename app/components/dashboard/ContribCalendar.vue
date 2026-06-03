@@ -1,7 +1,9 @@
 <template>
   <div class="rounded-lg border border-github-border bg-github-surface p-5">
     <div class="flex items-center justify-between mb-4">
-      <h2 class="text-github-text font-semibold">Contribuciones</h2>
+      <h2 class="text-github-text font-semibold">
+        Contribuciones
+      </h2>
       <span class="text-github-muted text-xs">
         <span class="font-semibold text-github-text">{{ calendar?.totalContributions ?? 0 }}</span>
         en el último año
@@ -15,7 +17,7 @@
           <template v-for="(label, i) in monthLabels" :key="i">
             <span
               class="text-github-muted text-xs shrink-0"
-              :style="{ width: label.width + 'px' }"
+              :style="{ width: `${label.width}px` }"
             >{{ label.name }}</span>
           </template>
         </div>

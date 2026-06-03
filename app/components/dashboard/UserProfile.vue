@@ -61,7 +61,8 @@ const props = defineProps<{ user: GitHubUser }>()
 
 const blogUrl = computed(() => {
   const blog = props.user.blog ?? ''
-  if (!blog) return ''
+  if (!blog)
+    return ''
   return blog.startsWith('http') ? blog : `https://${blog}`
 })
 </script>

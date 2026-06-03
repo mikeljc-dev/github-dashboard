@@ -1,5 +1,5 @@
-import { useDebounceFn } from '@vueuse/core'
 import type { GitHubRepo } from '~/types/github'
+import { useDebounceFn } from '@vueuse/core'
 import { SEARCH_DEBOUNCE_MS } from '~/utils/constants'
 
 export type SortOption = 'updated' | 'stars' | 'name'

@@ -178,7 +178,9 @@ const copied = ref(false)
 async function copyUrl() {
   await navigator.clipboard.writeText(window.location.href)
   copied.value = true
-  setTimeout(() => { copied.value = false }, 2000)
+  setTimeout(() => {
+    copied.value = false
+  }, 2000)
 }
 const isLoading = computed(() => store.loading || loadingExtras.value)
 
@@ -212,8 +214,8 @@ async function load(username: string) {
     const repoNames = store.repos.slice(0, MAX_REPOS_FOR_LANGUAGES).map(r => r.name)
     await Promise.all([
       fetchLanguages(clean, repoNames),
-      fetchEvents(clean).then((e) => { events.value = e }).catch(() => {}),
-      fetchContributions(clean).then((c) => { contributions.value = c }),
+      fetchEvents(clean).then(e => (events.value = e)).catch(() => {}),
+      fetchContributions(clean).then(c => (contributions.value = c)),
     ])
     loadingExtras.value = false
   }
