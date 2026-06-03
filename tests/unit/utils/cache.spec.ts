@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { readCache, writeCache, clearCache } from '../../../app/utils/cache'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { clearCache, readCache, writeCache } from '../../../app/utils/cache'
 
 const sessionStorageMock = (() => {
   let store: Record<string, string> = {}

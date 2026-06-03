@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { pLimit, withRetry } from '../../../app/utils/async'
 
 describe('pLimit', () => {
@@ -27,7 +27,10 @@ describe('pLimit', () => {
     const tasks = Array.from({ length: 6 }, () => () => {
       concurrent++
       maxConcurrent = Math.max(maxConcurrent, concurrent)
-      return new Promise<void>(resolve => setTimeout(() => { concurrent--; resolve() }, 5))
+      return new Promise<void>(resolve => setTimeout(() => {
+        concurrent--
+        resolve()
+      }, 5))
     })
     await pLimit(tasks, 2)
     expect(maxConcurrent).toBeLessThanOrEqual(2)

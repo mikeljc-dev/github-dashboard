@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import UserProfile from '../../../app/components/dashboard/UserProfile.vue'
 import type { GitHubUser } from '../../../app/types/github'
+import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
+import UserProfile from '../../../app/components/dashboard/UserProfile.vue'
 
 const BASE_USER: GitHubUser = {
   login: 'mikeljc-dev',
@@ -19,7 +19,7 @@ const BASE_USER: GitHubUser = {
   created_at: '2020-01-15T00:00:00Z',
 }
 
-describe('UserProfile', () => {
+describe('userProfile', () => {
   it('renderiza el nombre y el login del usuario', () => {
     const wrapper = mount(UserProfile, { props: { user: BASE_USER } })
     expect(wrapper.text()).toContain('Mikel')

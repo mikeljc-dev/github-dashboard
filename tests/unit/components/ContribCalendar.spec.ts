@@ -1,7 +1,7 @@
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import ContribCalendar from '../../../app/components/dashboard/ContribCalendar.vue'
 import type { ContributionCalendar } from '../../../app/types/github'
+import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
+import ContribCalendar from '../../../app/components/dashboard/ContribCalendar.vue'
 
 // Stub ClientOnly para que renderice su contenido en el entorno de test
 const stubs = { ClientOnly: { template: '<slot />' } }
@@ -19,7 +19,7 @@ function makeCalendar(totalContributions: number, weeks = 4): ContributionCalend
   }
 }
 
-describe('ContribCalendar', () => {
+describe('contribCalendar', () => {
   it('muestra el total de contribuciones', () => {
     const wrapper = mount(ContribCalendar, {
       props: { calendar: makeCalendar(432) },

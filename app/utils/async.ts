@@ -31,7 +31,8 @@ export async function withRetry<T>(fn: () => Promise<T>, options: RetryOptions):
 function isRetryableError(e: unknown): boolean {
   const err = e as { status?: number }
   // Reintenta solo en errores de red (sin status) o errores de servidor (5xx)
-  if (!err?.status) return true
+  if (!err?.status)
+    return true
   return err.status >= 500
 }
 
