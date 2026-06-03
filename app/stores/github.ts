@@ -1,5 +1,5 @@
+import type { GitHubRepo, GitHubUser, LanguageMap } from '~/types/github'
 import { defineStore } from 'pinia'
-import type { GitHubUser, GitHubRepo, LanguageMap } from '~/types/github'
 
 export const useGitHubStore = defineStore('github', () => {
   const username = ref('mikeljc-dev')
@@ -10,11 +10,11 @@ export const useGitHubStore = defineStore('github', () => {
   const error = ref<string | null>(null)
 
   const totalStars = computed(() =>
-    repos.value.reduce((acc, r) => acc + r.stargazers_count, 0)
+    repos.value.reduce((acc, r) => acc + r.stargazers_count, 0),
   )
 
   const totalForks = computed(() =>
-    repos.value.reduce((acc, r) => acc + r.forks_count, 0)
+    repos.value.reduce((acc, r) => acc + r.forks_count, 0),
   )
 
   const topLanguages = computed(() => {

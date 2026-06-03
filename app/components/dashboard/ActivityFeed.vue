@@ -1,6 +1,8 @@
 <template>
   <div class="rounded-lg border border-github-border bg-github-surface p-5">
-    <h2 class="text-github-text font-semibold mb-4">Actividad reciente</h2>
+    <h2 class="text-github-text font-semibold mb-4">
+      Actividad reciente
+    </h2>
     <ul class="space-y-1">
       <li
         v-for="event in events"
@@ -22,12 +24,16 @@
               {{ event.repo.name.split('/')[1] }}
             </a>
           </p>
-          <p class="text-github-muted text-xs mt-0.5">{{ timeAgo(event.created_at) }}</p>
+          <p class="text-github-muted text-xs mt-0.5">
+            {{ timeAgo(event.created_at) }}
+          </p>
         </div>
       </li>
     </ul>
     <div v-if="!events.length" class="py-8 text-center text-github-muted">
-      <p class="text-sm">Sin actividad reciente</p>
+      <p class="text-sm">
+        Sin actividad reciente
+      </p>
     </div>
   </div>
 </template>

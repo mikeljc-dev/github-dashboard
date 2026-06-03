@@ -29,7 +29,7 @@ const props = defineProps<{
 }>()
 
 const formattedValue = computed(() =>
-  props.value >= 1000 ? `${(props.value / 1000).toFixed(1)}k` : String(props.value)
+  props.value >= 1000 ? `${(props.value / 1000).toFixed(1)}k` : String(props.value),
 )
 
 const iconBg = computed(() => ({

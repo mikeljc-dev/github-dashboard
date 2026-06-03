@@ -1,9 +1,9 @@
-import { useDebounceFn } from '@vueuse/core'
 import type { GitHubRepo } from '~/types/github'
+import { useDebounceFn } from '@vueuse/core'
 
 export type SortOption = 'updated' | 'stars' | 'name'
 
-export const useRepos = (repos: Ref<GitHubRepo[]>) => {
+export function useRepos(repos: Ref<GitHubRepo[]>) {
   const search = ref('')
   const selectedLanguage = ref('')
   const sortBy = ref<SortOption>('updated')
@@ -26,15 +26,19 @@ export const useRepos = (repos: Ref<GitHubRepo[]>) => {
   const filtered = computed(() => {
     let result = [...repos.value]
 
-    if (excludeForks.value) result = result.filter(r => !r.fork)
-    if (selectedLanguage.value) result = result.filter(r => r.language === selectedLanguage.value)
+    if (excludeForks.value)
+      result = result.filter(r => !r.fork)
+    if (selectedLanguage.value)
+      result = result.filter(r => r.language === selectedLanguage.value)
     if (debouncedSearch.value) {
       const q = debouncedSearch.value.toLowerCase()
       result = result.filter(r => r.name.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q))
     }
 
-    if (sortBy.value === 'stars') result.sort((a, b) => b.stargazers_count - a.stargazers_count)
-    else if (sortBy.value === 'name') result.sort((a, b) => a.name.localeCompare(b.name))
+    if (sortBy.value === 'stars')
+      result.sort((a, b) => b.stargazers_count - a.stargazers_count)
+    else if (sortBy.value === 'name')
+      result.sort((a, b) => a.name.localeCompare(b.name))
     else result.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
 
     return result

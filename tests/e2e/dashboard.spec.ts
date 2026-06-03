@@ -1,7 +1,6 @@
-import { test, expect } from '@playwright/test'
+import { expect, test } from '@playwright/test'
 
 test.describe('GitHub Dashboard — flujo principal', () => {
-
   test('muestra el estado vacío inicial', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByText('Busca un usuario de GitHub')).toBeVisible()
@@ -49,7 +48,7 @@ test.describe('GitHub Dashboard — flujo principal', () => {
     // Username válido (< 39 chars) que no existe en GitHub
     await page.goto('/?user=user-xyz-not-real-abc99')
     await expect(
-      page.getByText(/usuario no encontrado|no encontrado/i)
+      page.getByText(/usuario no encontrado|no encontrado/i),
     ).toBeVisible({ timeout: 15_000 })
   })
 
@@ -67,5 +66,4 @@ test.describe('GitHub Dashboard — flujo principal', () => {
     // Usar el locator del nav específicamente
     await expect(page.locator('nav').getByText('GitHub Dashboard', { exact: true })).toBeVisible()
   })
-
 })

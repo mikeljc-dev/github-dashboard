@@ -20,12 +20,12 @@
       spellcheck="false"
       class="w-full rounded-lg border border-github-border bg-github-surface pl-9 pr-4 py-2 text-sm text-github-text placeholder-github-muted focus:border-github-accent focus:outline-none focus:ring-2 focus:ring-github-accent/30 transition-colors"
       @input="emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-    />
+    >
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   modelValue: string
   placeholder?: string
   ariaLabel?: string

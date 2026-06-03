@@ -35,6 +35,6 @@ export interface GitHubEvent {
   id: string
   type: string
   created_at: string
-  repo: { name: string; url: string }
+  repo: { name: string, url: string }
   payload: Record<string, unknown>
 }

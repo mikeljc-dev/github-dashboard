@@ -1,5 +1,5 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { timeAgo, formatDate, langColor, LANG_COLORS } from '../../../app/utils/github'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { formatDate, LANG_COLORS, langColor, timeAgo } from '../../../app/utils/github'
 
 describe('timeAgo', () => {
   beforeEach(() => {
@@ -61,7 +61,7 @@ describe('formatDate', () => {
 
 describe('langColor', () => {
   it('devuelve el color correcto para TypeScript', () => {
-    expect(langColor('TypeScript')).toBe(LANG_COLORS['TypeScript'])
+    expect(langColor('TypeScript')).toBe(LANG_COLORS.TypeScript)
   })
 
   it('devuelve el color correcto para Vue', () => {
@@ -77,17 +77,17 @@ describe('langColor', () => {
   })
 })
 
-describe('LANG_COLORS', () => {
+describe('lANG_COLORS', () => {
   it('contiene los lenguajes más populares', () => {
     const expected = ['TypeScript', 'JavaScript', 'Python', 'Vue', 'Go', 'Rust']
-    expected.forEach(lang => {
+    expected.forEach((lang) => {
       expect(LANG_COLORS).toHaveProperty(lang)
     })
   })
 
   it('todos los valores son strings de color hexadecimal válidos', () => {
-    Object.values(LANG_COLORS).forEach(color => {
-      expect(color).toMatch(/^#[0-9a-fA-F]{6}$/)
+    Object.values(LANG_COLORS).forEach((color) => {
+      expect(color).toMatch(/^#[0-9a-f]{6}$/i)
     })
   })
 })

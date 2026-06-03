@@ -21,7 +21,6 @@
     </nav>
 
     <main id="main-content" class="max-w-6xl mx-auto px-4 py-8">
-
       <!-- Search -->
       <div class="mb-8">
         <form
@@ -86,14 +85,17 @@
 
       <!-- Live region: anuncia cambios de estado a lectores de pantalla -->
       <p class="sr-only" aria-live="polite" aria-atomic="true">
-        <template v-if="isLoading">Cargando perfil de {{ inputUsername }}…</template>
-        <template v-else-if="store.user">Perfil de {{ store.user.login }} cargado con {{ store.repos.length }} repositorios.</template>
+        <template v-if="isLoading">
+          Cargando perfil de {{ inputUsername }}…
+        </template>
+        <template v-else-if="store.user">
+          Perfil de {{ store.user.login }} cargado con {{ store.repos.length }} repositorios.
+        </template>
       </p>
 
       <!-- Content -->
       <Transition name="fade">
         <div v-if="!isLoading && store.user">
-
           <!-- Profile -->
           <div class="rounded-lg border border-github-border bg-github-surface p-6 mb-6">
             <div class="flex flex-col sm:flex-row items-start gap-5">
@@ -101,10 +103,12 @@
                 :src="store.user.avatar_url"
                 :alt="`Avatar de ${store.user.name || store.user.login}`"
                 class="w-20 h-20 rounded-full ring-2 ring-github-border shrink-0"
-              />
+              >
               <div class="flex-1 min-w-0">
                 <div class="flex flex-wrap items-center gap-3 mb-1">
-                  <h2 class="text-xl font-bold text-github-text">{{ store.user.name || store.user.login }}</h2>
+                  <h2 class="text-xl font-bold text-github-text">
+                    {{ store.user.name || store.user.login }}
+                  </h2>
                   <a
                     :href="store.user.html_url"
                     target="_blank"
@@ -115,7 +119,9 @@
                     @{{ store.user.login }}
                   </a>
                 </div>
-                <p v-if="store.user.bio" class="text-github-muted text-sm mb-3">{{ store.user.bio }}</p>
+                <p v-if="store.user.bio" class="text-github-muted text-sm mb-3">
+                  {{ store.user.bio }}
+                </p>
                 <div class="flex flex-wrap gap-x-4 gap-y-1.5 text-github-muted text-xs">
                   <span v-if="store.user.company" class="flex items-center gap-1">
                     🏢 {{ store.user.company }}
@@ -172,11 +178,14 @@
           <svg class="mx-auto h-16 w-16 mb-4 opacity-30" fill="currentColor" viewBox="0 0 24 24">
             <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
           </svg>
-          <p class="text-lg font-medium">Busca un usuario de GitHub</p>
-          <p class="text-sm mt-1">Escribe un nombre de usuario para ver su perfil y repositorios</p>
+          <p class="text-lg font-medium">
+            Busca un usuario de GitHub
+          </p>
+          <p class="text-sm mt-1">
+            Escribe un nombre de usuario para ver su perfil y repositorios
+          </p>
         </div>
       </Transition>
-
     </main>
   </div>
 </template>
@@ -209,13 +218,15 @@ useHead(computed(() => ({
 
 const blogUrl = computed(() => {
   const blog = store.user?.blog ?? ''
-  if (!blog) return ''
+  if (!blog)
+    return ''
   return blog.startsWith('http') ? blog : `https://${blog}`
 })
 
-const load = async (username: string) => {
+async function load(username: string) {
   const clean = username.trim()
-  if (!clean || isLoading.value) return
+  if (!clean || isLoading.value)
+    return
 
   // Actualizar URL sin recargar la página
   await router.replace({ query: { user: clean } })
@@ -228,7 +239,7 @@ const load = async (username: string) => {
     const repoNames = store.repos.slice(0, 20).map(r => r.name)
     await Promise.all([
       fetchLanguages(clean, repoNames),
-      fetchEvents(clean).then(e => { events.value = e }).catch(() => {}),
+      fetchEvents(clean).then((e) => { events.value = e }).catch(() => {}),
     ])
     loadingExtras.value = false
   }
@@ -250,7 +261,8 @@ watch(() => route.query.user, (user) => {
 
 onMounted(() => {
   const user = route.query.user as string | undefined
-  if (user) load(user)
+  if (user)
+    load(user)
 })
 </script>
 

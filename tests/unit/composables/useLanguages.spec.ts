@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { ref } from 'vue'
 import { useLanguages } from '../../../app/composables/useLanguages'
 import { LANG_COLORS } from '../../../app/utils/github'
@@ -52,8 +52,8 @@ describe('useLanguages — chartData', () => {
     const { chartData } = useLanguages(ref({ TypeScript: 1000, Vue: 500 }))
     const tsIdx = chartData.value.labels.indexOf('TypeScript')
     const vueIdx = chartData.value.labels.indexOf('Vue')
-    expect(chartData.value.colors[tsIdx]).toBe(LANG_COLORS['TypeScript'])
-    expect(chartData.value.colors[vueIdx]).toBe(LANG_COLORS['Vue'])
+    expect(chartData.value.colors[tsIdx]).toBe(LANG_COLORS.TypeScript)
+    expect(chartData.value.colors[vueIdx]).toBe(LANG_COLORS.Vue)
   })
 
   it('asigna color gris a lenguajes desconocidos', () => {
@@ -63,7 +63,9 @@ describe('useLanguages — chartData', () => {
 
   it('el color de "Otros" es siempre #444c56', () => {
     const langs: Record<string, number> = {}
-    ;['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach((k, i) => { langs[k] = 1000 - i * 100 })
+    ;['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach((k, i) => {
+      langs[k] = 1000 - i * 100
+    })
     const { chartData } = useLanguages(ref(langs))
     const othersIdx = chartData.value.labels.indexOf('Otros')
     expect(chartData.value.colors[othersIdx]).toBe('#444c56')

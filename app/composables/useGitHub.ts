@@ -1,4 +1,4 @@
-import type { GitHubUser, GitHubRepo, LanguageMap, GitHubEvent } from '~/types/github'
+import type { GitHubEvent, GitHubRepo, GitHubUser, LanguageMap } from '~/types/github'
 
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutos
 
@@ -10,14 +10,16 @@ interface CacheEntry<T> {
 function readCache<T>(key: string): T | null {
   try {
     const raw = sessionStorage.getItem(key)
-    if (!raw) return null
+    if (!raw)
+      return null
     const entry = JSON.parse(raw) as CacheEntry<T>
     if (Date.now() - entry.ts > CACHE_TTL_MS) {
       sessionStorage.removeItem(key)
       return null
     }
     return entry.data
-  } catch {
+  }
+  catch {
     sessionStorage.removeItem(key)
     return null
   }
@@ -26,26 +28,31 @@ function readCache<T>(key: string): T | null {
 function writeCache<T>(key: string, data: T): void {
   try {
     sessionStorage.setItem(key, JSON.stringify({ data, ts: Date.now() } satisfies CacheEntry<T>))
-  } catch {
+  }
+  catch {
     // sessionStorage puede estar lleno o deshabilitado
   }
 }
 
 function parseApiError(e: unknown): string {
-  const err = e as { status?: number; data?: { message?: string } }
+  const err = e as { status?: number, data?: { message?: string } }
   const status = err?.status
 
-  if (status === 404) return 'Usuario no encontrado'
-  if (status === 403) return 'Rate limit excedido. Intenta en unos minutos.'
-  if (status === 401) return 'Token de GitHub inválido o expirado'
-  if (status === 422) return 'Nombre de usuario inválido'
+  if (status === 404)
+    return 'Usuario no encontrado'
+  if (status === 403)
+    return 'Rate limit excedido. Intenta en unos minutos.'
+  if (status === 401)
+    return 'Token de GitHub inválido o expirado'
+  if (status === 422)
+    return 'Nombre de usuario inválido'
 
   return err?.data?.message ?? 'Error al conectar con GitHub'
 }
 
 async function pLimit<T>(
   tasks: (() => Promise<T>)[],
-  concurrency: number
+  concurrency: number,
 ): Promise<PromiseSettledResult<T>[]> {
   const results: PromiseSettledResult<T>[] = []
   let idx = 0
@@ -55,7 +62,8 @@ async function pLimit<T>(
       const i = idx++
       try {
         results[i] = { status: 'fulfilled', value: await tasks[i]() }
-      } catch (e) {
+      }
+      catch (e) {
         results[i] = { status: 'rejected', reason: e }
       }
     }
@@ -65,7 +73,7 @@ async function pLimit<T>(
   return results
 }
 
-export const useGitHub = () => {
+export function useGitHub() {
   const store = useGitHubStore()
   let abortController: AbortController | null = null
 
@@ -80,7 +88,7 @@ export const useGitHub = () => {
     store.repos = []
     store.languages = {}
 
-    const cached = readCache<{ user: GitHubUser; repos: GitHubRepo[] }>(`gh-user-${username}`)
+    const cached = readCache<{ user: GitHubUser, repos: GitHubRepo[] }>(`gh-user-${username}`)
     if (cached) {
       store.user = cached.user
       store.repos = cached.repos
@@ -95,17 +103,20 @@ export const useGitHub = () => {
         $fetch<GitHubRepo[]>(`/api/github/repos?username=${username}`),
       ])
 
-      if (abortController.signal.aborted) return
+      if (abortController.signal.aborted)
+        return
 
       store.user = userData
       store.repos = reposData
       store.username = username
       writeCache(`gh-user-${username}`, { user: userData, repos: reposData })
-    } catch (e) {
+    }
+    catch (e) {
       if (!abortController.signal.aborted) {
         store.error = parseApiError(e)
       }
-    } finally {
+    }
+    finally {
       store.loading = false
     }
   }
@@ -119,7 +130,7 @@ export const useGitHub = () => {
 
     // Máximo 8 requests concurrentes para no saturar la API
     const tasks = repoNames.map(repo => () =>
-      $fetch<LanguageMap>(`/api/github/languages/${repo}?username=${username}`)
+      $fetch<LanguageMap>(`/api/github/languages/${repo}?username=${username}`),
     )
     const results = await pLimit(tasks, 8)
 
@@ -138,7 +149,8 @@ export const useGitHub = () => {
 
   const fetchEvents = async (username: string): Promise<GitHubEvent[]> => {
     const cached = readCache<GitHubEvent[]>(`gh-events-${username}`)
-    if (cached) return cached
+    if (cached)
+      return cached
 
     const data = await $fetch<GitHubEvent[]>(`/api/github/events?username=${username}`)
     writeCache(`gh-events-${username}`, data)

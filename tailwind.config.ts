@@ -18,9 +18,9 @@ export default {
           muted: '#8b949e',
           accent: '#58a6ff',
           green: '#3fb950',
-        }
-      }
-    }
+        },
+      },
+    },
   },
   plugins: [],
 } satisfies Config

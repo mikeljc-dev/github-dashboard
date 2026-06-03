@@ -8,16 +8,16 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
   ],
   runtimeConfig: {
-    githubToken: process.env.GITHUB_TOKEN,
+    githubToken: process.env.GITHUB_TOKEN, // eslint-disable-line node/prefer-global/process
     public: {
       githubBaseUrl: 'https://api.github.com',
-    }
+    },
   },
   typescript: { strict: true },
   vite: {
     optimizeDeps: {
       include: ['chart.js', 'vue-chartjs'],
-    }
+    },
   },
   routeRules: {
     '/**': {
@@ -26,7 +26,7 @@ export default defineNuxtConfig({
         'X-Frame-Options': 'DENY',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
         'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-      }
-    }
-  }
+      },
+    },
+  },
 })

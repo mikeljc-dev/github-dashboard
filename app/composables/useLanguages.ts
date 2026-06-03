@@ -1,7 +1,7 @@
 import type { LanguageMap } from '~/types/github'
 import { LANG_COLORS } from '~/utils/github'
 
-export const useLanguages = (languages: Ref<LanguageMap>) => {
+export function useLanguages(languages: Ref<LanguageMap>) {
   const chartData = computed(() => {
     const entries = Object.entries(languages.value).sort(([, a], [, b]) => b - a)
     const top6 = entries.slice(0, 6)

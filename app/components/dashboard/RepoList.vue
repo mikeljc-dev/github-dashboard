@@ -16,8 +16,12 @@
         class="rounded-lg border border-github-border bg-github-surface px-3 py-2 text-sm text-github-text focus:border-github-accent focus:outline-none focus:ring-2 focus:ring-github-accent/30"
         aria-label="Filtrar por lenguaje de programación"
       >
-        <option value="">Todos los lenguajes</option>
-        <option v-for="lang in languages" :key="lang" :value="lang">{{ lang }}</option>
+        <option value="">
+          Todos los lenguajes
+        </option>
+        <option v-for="lang in languages" :key="lang" :value="lang">
+          {{ lang }}
+        </option>
       </select>
 
       <label class="sr-only" for="sort-select">Ordenar repositorios</label>
@@ -27,9 +31,15 @@
         class="rounded-lg border border-github-border bg-github-surface px-3 py-2 text-sm text-github-text focus:border-github-accent focus:outline-none focus:ring-2 focus:ring-github-accent/30"
         aria-label="Ordenar repositorios"
       >
-        <option value="updated">Más reciente</option>
-        <option value="stars">Más estrellas</option>
-        <option value="name">Nombre</option>
+        <option value="updated">
+          Más reciente
+        </option>
+        <option value="stars">
+          Más estrellas
+        </option>
+        <option value="name">
+          Nombre
+        </option>
       </select>
 
       <label class="flex items-center gap-2 text-sm text-github-muted cursor-pointer select-none">
@@ -38,7 +48,7 @@
           type="checkbox"
           class="accent-github-accent focus:ring-2 focus:ring-github-accent"
           aria-describedby="fork-description"
-        />
+        >
         Excluir forks
         <span id="fork-description" class="sr-only">Ocultar repositorios que son forks de otros proyectos</span>
       </label>
@@ -53,8 +63,12 @@
       <DashboardRepoCard v-for="repo in filtered" :key="repo.id" :repo="repo" />
     </div>
     <div v-else role="status" class="py-16 text-center text-github-muted">
-      <p class="text-lg">No se encontraron repositorios</p>
-      <p class="text-sm mt-1">Intenta ajustar los filtros</p>
+      <p class="text-lg">
+        No se encontraron repositorios
+      </p>
+      <p class="text-sm mt-1">
+        Intenta ajustar los filtros
+      </p>
     </div>
   </section>
 </template>

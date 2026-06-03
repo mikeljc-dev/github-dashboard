@@ -3,7 +3,7 @@
     :href="repo.html_url"
     target="_blank"
     rel="noopener noreferrer"
-    :aria-label="`${repo.name}${repo.description ? ': ' + repo.description : ''} — Ver en GitHub`"
+    :aria-label="`${repo.name}${repo.description ? `: ${repo.description}` : ''} — Ver en GitHub`"
     class="flex flex-col rounded-lg border border-github-border bg-github-surface p-4 hover:border-github-accent hover:shadow-lg hover:shadow-github-accent/5 transition-all duration-200 group"
   >
     <div class="flex items-start justify-between gap-2 mb-2">
@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
 import type { GitHubRepo } from '~/types/github'
-import { timeAgo, langColor } from '~/utils/github'
+import { langColor, timeAgo } from '~/utils/github'
 
 const props = defineProps<{ repo: GitHubRepo }>()
 const repoLangColor = computed(() => langColor(props.repo.language))

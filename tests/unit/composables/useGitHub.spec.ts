@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { setActivePinia, createPinia } from 'pinia'
+import { createPinia, setActivePinia } from 'pinia'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock $fetch global antes de importar el composable
 const mockFetch = vi.fn()
@@ -21,10 +21,19 @@ const { useGitHub } = await import('../../../app/composables/useGitHub')
 const { useGitHubStore } = await import('../../../app/stores/github')
 
 const MOCK_USER = {
-  login: 'testuser', name: 'Test User', avatar_url: 'https://example.com/avatar.png',
-  bio: 'Test bio', company: null, location: 'Madrid', blog: null,
-  twitter_username: null, public_repos: 10, followers: 100, following: 50,
-  html_url: 'https://github.com/testuser', created_at: '2020-01-01T00:00:00Z',
+  login: 'testuser',
+  name: 'Test User',
+  avatar_url: 'https://example.com/avatar.png',
+  bio: 'Test bio',
+  company: null,
+  location: 'Madrid',
+  blog: null,
+  twitter_username: null,
+  public_repos: 10,
+  followers: 100,
+  following: 50,
+  html_url: 'https://github.com/testuser',
+  created_at: '2020-01-01T00:00:00Z',
 }
 
 const MOCK_REPOS = [
@@ -115,7 +124,9 @@ describe('useGitHub — fetchAll', () => {
 
   it('pone loading en true durante la carga', async () => {
     let resolveUser!: (v: unknown) => void
-    const userPromise = new Promise(r => { resolveUser = r })
+    const userPromise = new Promise((r) => {
+      resolveUser = r
+    })
     mockFetch.mockReturnValueOnce(userPromise).mockResolvedValueOnce(MOCK_REPOS)
 
     const store = useGitHubStore()
@@ -145,9 +156,9 @@ describe('useGitHub — fetchLanguages', () => {
     const { fetchLanguages } = useGitHub()
     await fetchLanguages('testuser', ['repo-1', 'repo-2'])
 
-    expect(store.languages['TypeScript']).toBe(1500)
-    expect(store.languages['CSS']).toBe(200)
-    expect(store.languages['Vue']).toBe(300)
+    expect(store.languages.TypeScript).toBe(1500)
+    expect(store.languages.CSS).toBe(200)
+    expect(store.languages.Vue).toBe(300)
   })
 
   it('ignora repos que fallan sin romper los demás', async () => {
@@ -159,6 +170,6 @@ describe('useGitHub — fetchLanguages', () => {
     const { fetchLanguages } = useGitHub()
     await fetchLanguages('testuser', ['repo-fail', 'repo-ok'])
 
-    expect(store.languages['Python']).toBe(800)
+    expect(store.languages.Python).toBe(800)
   })
 })

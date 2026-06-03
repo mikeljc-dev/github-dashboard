@@ -1,28 +1,30 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { ref, nextTick } from 'vue'
-import { useRepos } from '../../../app/composables/useRepos'
 import type { GitHubRepo } from '../../../app/types/github'
+import { describe, expect, it, vi } from 'vitest'
+import { nextTick, ref } from 'vue'
+import { useRepos } from '../../../app/composables/useRepos'
 
 // useDebounceFn → ejecutar inmediatamente en tests
 vi.mock('@vueuse/core', () => ({
   useDebounceFn: (fn: (...args: unknown[]) => unknown) => fn,
 }))
 
-const makeRepo = (overrides: Partial<GitHubRepo> = {}): GitHubRepo => ({
-  id: Math.random(),
-  name: 'repo',
-  full_name: 'user/repo',
-  description: null,
-  html_url: 'https://github.com/user/repo',
-  stargazers_count: 0,
-  forks_count: 0,
-  language: null,
-  updated_at: '2024-01-01T00:00:00Z',
-  topics: [],
-  fork: false,
-  archived: false,
-  ...overrides,
-})
+function makeRepo(overrides: Partial<GitHubRepo> = {}): GitHubRepo {
+  return {
+    id: Math.random(),
+    name: 'repo',
+    full_name: 'user/repo',
+    description: null,
+    html_url: 'https://github.com/user/repo',
+    stargazers_count: 0,
+    forks_count: 0,
+    language: null,
+    updated_at: '2024-01-01T00:00:00Z',
+    topics: [],
+    fork: false,
+    archived: false,
+    ...overrides,
+  }
+}
 
 const TS_REPO = makeRepo({ id: 1, name: 'alpha', language: 'TypeScript', stargazers_count: 10, updated_at: '2024-03-01T00:00:00Z' })
 const JS_REPO = makeRepo({ id: 2, name: 'beta', language: 'JavaScript', stargazers_count: 50, updated_at: '2024-01-01T00:00:00Z' })

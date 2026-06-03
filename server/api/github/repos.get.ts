@@ -8,6 +8,6 @@ export default defineEventHandler(async (event) => {
 
   return githubFetch(
     `/users/${username}/repos?per_page=100&sort=updated&type=owner`,
-    githubToken
+    githubToken,
   )
 })
