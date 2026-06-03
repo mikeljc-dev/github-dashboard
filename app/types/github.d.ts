@@ -49,3 +49,14 @@ export interface ContributionCalendar {
   totalContributions: number
   weeks: { contributionDays: ContributionDay[] }[]
 }
+
+export interface RateLimitInfo {
+  limit: number
+  remaining: number
+  reset: number
+}
+
+export interface RateLimit {
+  core: RateLimitInfo
+  graphql: RateLimitInfo
+}

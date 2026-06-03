@@ -23,6 +23,7 @@
               <span>{{ copied ? '¡Copiado!' : 'Compartir' }}</span>
             </button>
           </Transition>
+          <UiRateLimitBadge :rate-limit="rateLimit" />
           <a
             href="https://github.com"
             target="_blank"
@@ -162,7 +163,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ContributionCalendar, GitHubEvent } from '~/types/github'
+import type { ContributionCalendar, GitHubEvent, RateLimit } from '~/types/github'
 import { MAX_REPOS_FOR_LANGUAGES } from '~/utils/constants'
 
 const route = useRoute()
@@ -172,8 +173,16 @@ const { fetchAll, fetchLanguages, fetchEvents, fetchContributions } = useGitHub(
 
 const events = ref<GitHubEvent[]>([])
 const contributions = ref<ContributionCalendar | null>(null)
+const rateLimit = ref<RateLimit | null>(null)
 const loadingExtras = ref(false)
 const copied = ref(false)
+
+async function fetchRateLimit() {
+  try {
+    rateLimit.value = await $fetch<RateLimit>('/api/github/rate-limit')
+  }
+  catch { /* silencioso — no crítico */ }
+}
 
 async function copyUrl() {
   await navigator.clipboard.writeText(window.location.href)
@@ -216,6 +225,7 @@ async function load(username: string) {
       fetchLanguages(clean, repoNames),
       fetchEvents(clean).then(e => (events.value = e)).catch(() => {}),
       fetchContributions(clean).then(c => (contributions.value = c)),
+      fetchRateLimit(),
     ])
     loadingExtras.value = false
   }
