@@ -1,6 +1,4 @@
-import type { FetchOptions } from 'ofetch'
-
-export function githubHeaders(token: string): HeadersInit {
+export function githubHeaders(token: string): Record<string, string> {
   return {
     'Authorization': token ? `Bearer ${token}` : '',
     'Accept': 'application/vnd.github+json',
@@ -8,18 +6,10 @@ export function githubHeaders(token: string): HeadersInit {
   }
 }
 
-export async function githubFetch<T>(
-  path: string,
-  token: string,
-  options: FetchOptions = {},
-): Promise<T> {
+export async function githubFetch<T>(path: string, token: string): Promise<T> {
   try {
     return await $fetch<T>(`https://api.github.com${path}`, {
-      ...options,
-      headers: {
-        ...githubHeaders(token),
-        ...(options.headers ?? {}),
-      },
+      headers: githubHeaders(token),
     })
   }
   catch (err: unknown) {
@@ -41,12 +31,12 @@ export async function githubFetch<T>(
 }
 
 export function validateUsername(username: string | undefined): string {
-  if (!username || typeof username !== 'string') {
+  if (!username || typeof username !== 'string')
     throw createError({ statusCode: 400, message: 'El parámetro username es requerido' })
-  }
+
   const clean = username.trim()
-  if (!/^[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?$/i.test(clean)) {
+  if (!/^[a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?$/i.test(clean))
     throw createError({ statusCode: 422, message: 'Nombre de usuario inválido' })
-  }
+
   return clean
 }

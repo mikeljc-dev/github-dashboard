@@ -61,7 +61,7 @@ async function pLimit<T>(
     while (idx < tasks.length) {
       const i = idx++
       try {
-        results[i] = { status: 'fulfilled', value: await tasks[i]() }
+        results[i] = { status: 'fulfilled', value: await tasks[i]!() }
       }
       catch (e) {
         results[i] = { status: 'rejected', reason: e }

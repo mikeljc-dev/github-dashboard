@@ -19,7 +19,7 @@
             <span class="h-3 w-3 rounded-sm shrink-0" :style="{ background: chartData.colors[i] }" />
             {{ label }}
           </span>
-          <span class="text-github-muted">{{ percentage(chartData.data[i]) }}%</span>
+          <span class="text-github-muted">{{ percentage(chartData.data[i] ?? 0) }}%</span>
         </li>
       </ul>
     </div>
