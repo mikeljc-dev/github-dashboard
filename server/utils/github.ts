@@ -8,9 +8,10 @@ export function githubHeaders(token: string): Record<string, string> {
 
 export async function githubFetch<T>(path: string, token: string): Promise<T> {
   try {
-    return await $fetch<T>(`https://api.github.com${path}`, {
+    const res = await $fetch<T>(`https://api.github.com${path}`, {
       headers: githubHeaders(token),
     })
+    return res as T
   }
   catch (err: unknown) {
     const e = err as { status?: number, data?: { message?: string } }
