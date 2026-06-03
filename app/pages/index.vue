@@ -151,6 +151,9 @@
             <DashboardStatsCard label="Seguidores" :value="store.user.followers" icon="👥" color="purple" />
           </div>
 
+          <!-- Contribution Calendar -->
+          <DashboardContribCalendar :calendar="contributions" class="mb-6" />
+
           <!-- Chart + Activity -->
           <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
             <DashboardLanguageChart :languages="store.languages" />
@@ -191,15 +194,16 @@
 </template>
 
 <script setup lang="ts">
-import type { GitHubEvent } from '~/types/github'
+import type { ContributionCalendar, GitHubEvent } from '~/types/github'
 import { formatDate } from '~/utils/github'
 
 const route = useRoute()
 const router = useRouter()
 const store = useGitHubStore()
-const { fetchAll, fetchLanguages, fetchEvents } = useGitHub()
+const { fetchAll, fetchLanguages, fetchEvents, fetchContributions } = useGitHub()
 
 const events = ref<GitHubEvent[]>([])
+const contributions = ref<ContributionCalendar | null>(null)
 const loadingExtras = ref(false)
 const isLoading = computed(() => store.loading || loadingExtras.value)
 
@@ -232,6 +236,7 @@ async function load(username: string) {
   await router.replace({ query: { user: clean } })
 
   events.value = []
+  contributions.value = null
   await fetchAll(clean)
 
   if (store.repos.length) {
@@ -240,6 +245,7 @@ async function load(username: string) {
     await Promise.all([
       fetchLanguages(clean, repoNames),
       fetchEvents(clean).then((e) => { events.value = e }).catch(() => {}),
+      fetchContributions(clean).then((c) => { contributions.value = c }),
     ])
     loadingExtras.value = false
   }

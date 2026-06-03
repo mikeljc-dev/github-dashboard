@@ -1,4 +1,4 @@
-import type { GitHubEvent, GitHubRepo, GitHubUser, LanguageMap } from '~/types/github'
+import type { ContributionCalendar, GitHubEvent, GitHubRepo, GitHubUser, LanguageMap } from '~/types/github'
 
 const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutos
 
@@ -157,5 +157,20 @@ export function useGitHub() {
     return data
   }
 
-  return { fetchAll, fetchLanguages, fetchEvents }
+  const fetchContributions = async (username: string): Promise<ContributionCalendar | null> => {
+    const cached = readCache<ContributionCalendar>(`gh-contrib-${username}`)
+    if (cached)
+      return cached
+
+    try {
+      const data = await $fetch<ContributionCalendar>(`/api/github/contributions?username=${username}`)
+      writeCache(`gh-contrib-${username}`, data)
+      return data
+    }
+    catch {
+      return null
+    }
+  }
+
+  return { fetchAll, fetchLanguages, fetchEvents, fetchContributions }
 }

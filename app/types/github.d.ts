@@ -38,3 +38,14 @@ export interface GitHubEvent {
   repo: { name: string, url: string }
   payload: Record<string, unknown>
 }
+
+export interface ContributionDay {
+  date: string
+  contributionCount: number
+  color: string
+}
+
+export interface ContributionCalendar {
+  totalContributions: number
+  weeks: { contributionDays: ContributionDay[] }[]
+}
