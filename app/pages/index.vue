@@ -111,52 +111,7 @@
       <!-- Content -->
       <Transition name="fade">
         <div v-if="!isLoading && store.user">
-          <!-- Profile -->
-          <div class="rounded-lg border border-github-border bg-github-surface p-6 mb-6">
-            <div class="flex flex-col sm:flex-row items-start gap-5">
-              <img
-                :src="store.user.avatar_url"
-                :alt="`Avatar de ${store.user.name || store.user.login}`"
-                class="w-20 h-20 rounded-full ring-2 ring-github-border shrink-0"
-              >
-              <div class="flex-1 min-w-0">
-                <div class="flex flex-wrap items-center gap-3 mb-1">
-                  <h2 class="text-xl font-bold text-github-text">
-                    {{ store.user.name || store.user.login }}
-                  </h2>
-                  <a
-                    :href="store.user.html_url"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    :aria-label="`Ver perfil de ${store.user.login} en GitHub (abre en nueva pestaña)`"
-                    class="text-github-accent text-sm hover:underline focus:outline-none focus:ring-2 focus:ring-github-accent focus:ring-offset-1 focus:ring-offset-github-surface rounded"
-                  >
-                    @{{ store.user.login }}
-                  </a>
-                </div>
-                <p v-if="store.user.bio" class="text-github-muted text-sm mb-3">
-                  {{ store.user.bio }}
-                </p>
-                <div class="flex flex-wrap gap-x-4 gap-y-1.5 text-github-muted text-xs">
-                  <span v-if="store.user.company" class="flex items-center gap-1">
-                    🏢 {{ store.user.company }}
-                  </span>
-                  <span v-if="store.user.location" class="flex items-center gap-1">
-                    📍 {{ store.user.location }}
-                  </span>
-                  <span v-if="store.user.blog" class="flex items-center gap-1">
-                    🔗
-                    <a :href="blogUrl" target="_blank" rel="noopener noreferrer" class="text-github-accent hover:underline truncate max-w-48">
-                      {{ store.user.blog }}
-                    </a>
-                  </span>
-                  <span class="flex items-center gap-1">
-                    📅 Desde {{ formatDate(store.user.created_at) }}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <DashboardUserProfile :user="store.user" class="mb-6" />
 
           <!-- Stats -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-6">
@@ -208,7 +163,7 @@
 
 <script setup lang="ts">
 import type { ContributionCalendar, GitHubEvent } from '~/types/github'
-import { formatDate } from '~/utils/github'
+import { MAX_REPOS_FOR_LANGUAGES } from '~/utils/constants'
 
 const route = useRoute()
 const router = useRouter()
@@ -240,13 +195,6 @@ useHead(computed(() => ({
   ],
 })))
 
-const blogUrl = computed(() => {
-  const blog = store.user?.blog ?? ''
-  if (!blog)
-    return ''
-  return blog.startsWith('http') ? blog : `https://${blog}`
-})
-
 async function load(username: string) {
   const clean = username.trim()
   if (!clean || isLoading.value)
@@ -261,7 +209,7 @@ async function load(username: string) {
 
   if (store.repos.length) {
     loadingExtras.value = true
-    const repoNames = store.repos.slice(0, 20).map(r => r.name)
+    const repoNames = store.repos.slice(0, MAX_REPOS_FOR_LANGUAGES).map(r => r.name)
     await Promise.all([
       fetchLanguages(clean, repoNames),
       fetchEvents(clean).then((e) => { events.value = e }).catch(() => {}),

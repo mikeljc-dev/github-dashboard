@@ -9,14 +9,14 @@
           <Doughnut :data="data" :options="options" />
         </ClientOnly>
       </div>
-      <ul class="space-y-2 w-full">
+      <ul class="space-y-2 w-full" role="list" aria-label="Distribución de lenguajes de programación">
         <li
           v-for="(label, i) in chartData.labels"
           :key="label"
           class="flex items-center justify-between text-sm"
         >
           <span class="flex items-center gap-2 text-github-text">
-            <span class="h-3 w-3 rounded-sm shrink-0" :style="{ background: chartData.colors[i] }" />
+            <span class="h-3 w-3 rounded-sm shrink-0" :style="{ background: chartData.colors[i] }" aria-hidden="true" />
             {{ label }}
           </span>
           <span class="text-github-muted">{{ percentage(chartData.data[i] ?? 0) }}%</span>

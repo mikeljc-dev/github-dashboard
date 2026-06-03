@@ -1,6 +1,5 @@
 import type { ContributionCalendar, GitHubEvent, GitHubRepo, GitHubUser, LanguageMap } from '~/types/github'
-
-const CACHE_TTL_MS = 5 * 60 * 1000 // 5 minutos
+import { CACHE_TTL_MS, MAX_LANGUAGE_CONCURRENCY } from '~/utils/constants'
 
 interface CacheEntry<T> {
   data: T
@@ -128,11 +127,10 @@ export function useGitHub() {
       return
     }
 
-    // Máximo 8 requests concurrentes para no saturar la API
     const tasks = repoNames.map(repo => () =>
       $fetch<LanguageMap>(`/api/github/languages/${repo}?username=${username}`),
     )
-    const results = await pLimit(tasks, 8)
+    const results = await pLimit(tasks, MAX_LANGUAGE_CONCURRENCY)
 
     const merged: LanguageMap = {}
     for (const result of results) {

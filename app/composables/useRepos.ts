@@ -1,5 +1,6 @@
-import type { GitHubRepo } from '~/types/github'
 import { useDebounceFn } from '@vueuse/core'
+import type { GitHubRepo } from '~/types/github'
+import { SEARCH_DEBOUNCE_MS } from '~/utils/constants'
 
 export type SortOption = 'updated' | 'stars' | 'name'
 
@@ -12,7 +13,7 @@ export function useRepos(repos: Ref<GitHubRepo[]>) {
   const debouncedSearch = ref('')
   const updateSearch = useDebounceFn((val: string) => {
     debouncedSearch.value = val
-  }, 300)
+  }, SEARCH_DEBOUNCE_MS)
 
   watch(search, val => updateSearch(val))
 
@@ -32,14 +33,18 @@ export function useRepos(repos: Ref<GitHubRepo[]>) {
       result = result.filter(r => r.language === selectedLanguage.value)
     if (debouncedSearch.value) {
       const q = debouncedSearch.value.toLowerCase()
-      result = result.filter(r => r.name.toLowerCase().includes(q) || r.description?.toLowerCase().includes(q))
+      result = result.filter(r =>
+        r.name.toLowerCase().includes(q)
+        || r.description?.toLowerCase().includes(q),
+      )
     }
 
     if (sortBy.value === 'stars')
       result.sort((a, b) => b.stargazers_count - a.stargazers_count)
     else if (sortBy.value === 'name')
       result.sort((a, b) => a.name.localeCompare(b.name))
-    else result.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
+    else
+      result.sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime())
 
     return result
   })
